@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Spam Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container pt-3">
+        <div class="header">
+            <i class="fas fa-shield-alt"></i>
+            <h1>SMS Spam Classifier</h1>
+            <p class="subtitle">Check if your message is spam or legitimate</p>
+        </div>
+        
+        <div class="card">
+            <form action="{{ url_for('predict') }}" method="post">
+                <div class="input-group">
+                    <label for="message">Enter Message:</label>
+                    <textarea id="message" name="message" placeholder="Type or paste your message here..." required>{{ message }}</textarea>
+                </div>
+                <button type="submit" class="btn-analyze">
+                    <i class="fas fa-search"></i> Analyze Message
+                </button>
+            </form>
+
+            {% if prediction %}
+            <div class="result {% if prediction == 'spam' %}spam{% else %}ham{% endif %}">
+                <div class="result-header">
+                    <i class="{% if prediction == 'spam' %}fas fa-exclamation-triangle{% else %}fas fa-check-circle{% endif %}"></i>
+                    <h2>Analysis Result</h2>
+                </div>
+                <div class="result-content">
+                    <p>Classification: <strong>{{ prediction.upper() }}</strong></p>
+                    <div class="confidence-bar">
+                        <div class="progress" style="width: {{ probability }}%"></div>
+                        <span class="confidence-text">Confidence: {{ probability }}%</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
